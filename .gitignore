@@ -1,3 +1,5 @@
 /watchenv
 .env
 /notebooks/.ipynb_checkpoints
+/mlruns
+/mlartifacts
