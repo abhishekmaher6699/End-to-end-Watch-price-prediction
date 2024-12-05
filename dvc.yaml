@@ -1,0 +1,53 @@
+stages:
+  data_ingestion:
+    cmd: python -m src.data.data_ingestion
+    deps:
+      - src/data/data_ingestion.py
+    outs:
+      - artifacts/data/raw/raw_data.csv
+
+  data_transformation:
+    cmd: python -m src.data.data_transformation
+    deps:
+      - artifacts/data/raw/raw_data.csv
+      - src/data/data_transformation.py
+    outs:
+      - artifacts/data/processed/processed_data.csv
+
+  data_testing:
+    cmd: pytest tests/data_test.py > artifacts/data/testing_results.txt
+    deps:
+      - artifacts/data/processed/processed_data.csv
+      - tests/data_test.py
+    outs:
+      - artifacts/data/testing_results.txt
+
+  model_training:
+    cmd: python -m src.model.model_trainer
+    deps:
+      - artifacts/data/processed/processed_data.csv
+      - src/model/model_trainer.py
+      - params.yaml
+    outs:
+      - artifacts/models/pipeline.pkl
+      - artifacts/models/columns.pkl
+      - artifacts/data/processed/test_df.csv
+
+  model_evaluate:
+    cmd: python -m src.model.model_evaluation
+    deps:
+      - artifacts/data/processed/test_df.csv
+      - src/model/model_evaluation.py
+      - params.yaml
+      - artifacts/models/columns.pkl
+      - artifacts/models/pipeline.pkl
+    outs:
+      - experiment_info.json
+      - reports/chart.png
+  
+  register_model:
+    cmd: python -m src.model.register_model
+    deps:
+      - experiment_info.json
+    
+

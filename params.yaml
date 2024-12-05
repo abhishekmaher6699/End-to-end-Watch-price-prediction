@@ -1,0 +1,13 @@
+data_split:
+  test_size: 0.20
+
+model_building:
+  iterations: 1500
+  learning_rate: 0.21851510473670352
+  depth: 4
+  l2_leaf_reg: 8
+  rsm: 0.8488982802701295
+  random_strength: 2.138020781242421e-05
+  bagging_temperature: 0.00060825280116421
+  border_count: 16
+  loss_function: 'RMSE'
