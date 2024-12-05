@@ -42,12 +42,9 @@ class PathManager:
     def get_params_path(self) -> str:
         return os.path.join(self.project_root, 'params.yaml')
     
-    def get_processed_data_path(self) -> str:
-        return os.path.join(self.data_processed_dir, 'processed_data.csv')
-    
-    def get_test_data_path(self) -> str:
-        return os.path.join(self.data_processed_dir, 'test_df.csv')
-    
+    def get_train_data_path(self) -> str:
+        return os.path.join(self.data_processed_dir, 'train.csv')
+
     def get_model_path(self) -> str:
         return os.path.join(self.models_dir, 'pipeline.pkl')
     
@@ -71,17 +68,11 @@ def load_data(file_path):
     except Exception as e:
         raise CustomException(e, sys)
     
-def split_data(df, test_size, path_manager):
+def split_data(df):
 
     try:
-        train_df, test_df = train_test_split(df, test_size=test_size, random_state=42)
-        logging.info("Df split into train and test")
-
-        test_df.to_csv(path_manager.get_test_data_path(), index=False)
-        logging.info(f"Saved test df into {path_manager.get_test_data_path()} for later evaluation")
-
-        y_train = np.log1p(train_df['price'])
-        X_train = train_df.drop('price', axis=1)
+        y_train = np.log1p(df['price'])
+        X_train = df.drop('price', axis=1)
         logging.info("Train data ready for model")
 
         return X_train, y_train
@@ -146,10 +137,10 @@ def main():
 
     try:
         path_manager = PathManager()
-        df = load_data(path_manager.get_processed_data_path())
+        df = load_data(path_manager.get_train_data_path())
         params_yaml = load_params(path_manager.get_params_path())
 
-        X_train, y_train = split_data(df, params_yaml['data_split']['test_size'], path_manager)
+        X_train, y_train = split_data(df)
         columns = X_train.columns
 
         params =  {

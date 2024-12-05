@@ -36,7 +36,7 @@ class PathManager:
         return os.path.join(self.project_root, 'params.yaml')
         
     def get_test_data_path(self) -> str:
-        return os.path.join(self.data_processed_dir, 'test_df.csv')
+        return os.path.join(self.data_processed_dir, 'test.csv')
     
     def get_pipeline_path(self) -> str:
         return os.path.join(self.models_dir, 'pipeline.pkl')
@@ -128,7 +128,7 @@ def evaluate(X_test, y_test, pipeline):
             'MAE': mae,
             'R2': r2
         }
-        plot_chart(y_test_og, y_pred)
+        plot_chart(y_test_og, y_pred_og)
         logging.info("Evaluation done")
         return metrics
 

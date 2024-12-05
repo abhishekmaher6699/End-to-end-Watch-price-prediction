@@ -13,11 +13,15 @@ stages:
       - src/data/data_transformation.py
     outs:
       - artifacts/data/processed/processed_data.csv
+      - artifacts/data/processed/train.csv
+      - artifacts/data/processed/test.csv
 
   data_testing:
     cmd: pytest tests/data_test.py > artifacts/data/testing_results.txt
     deps:
       - artifacts/data/processed/processed_data.csv
+      - artifacts/data/processed/train.csv
+      - artifacts/data/processed/test.csv
       - tests/data_test.py
     outs:
       - artifacts/data/testing_results.txt
@@ -25,18 +29,17 @@ stages:
   model_training:
     cmd: python -m src.model.model_trainer
     deps:
-      - artifacts/data/processed/processed_data.csv
+      - artifacts/data/processed/train.csv
       - src/model/model_trainer.py
       - params.yaml
     outs:
       - artifacts/models/pipeline.pkl
       - artifacts/models/columns.pkl
-      - artifacts/data/processed/test_df.csv
 
   model_evaluate:
     cmd: python -m src.model.model_evaluation
     deps:
-      - artifacts/data/processed/test_df.csv
+      - artifacts/data/processed/test.csv
       - src/model/model_evaluation.py
       - params.yaml
       - artifacts/models/columns.pkl
