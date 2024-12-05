@@ -161,6 +161,7 @@ def main():
 
             for key, value in params.items():
                 mlflow.log_param(key, value)
+            mlflow.log_param("run", run.info.run_id)
 
             X_test, y_test = prepare_data(test_df)
             metrics = evaluate(X_test, y_test, pipeline)

@@ -190,7 +190,7 @@ def clean_data(df):
 def feature_engineer(df):
 
     precious_stones_df = pd.DataFrame()
-    parts = ["Case", "Dial", "Bracelet", "Crown", "Clasp", "Bezel", "Lugs", "Buckle"]
+    parts = ["Case", "Dial", "Bracelet", "Crown", "Clasp", "Bezel", "Lugs"]
     for part in parts:
         precious_stones_df[f"precious_stone_on_{part}"] = df['Precious Stone'].fillna('').apply(lambda x: 1 if part in str(x) else 0)
     
