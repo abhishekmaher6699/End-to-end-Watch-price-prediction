@@ -7,22 +7,7 @@ from dotenv import load_dotenv
 
 from src.utils.logger import logging
 from src.utils.exception import CustomException
-
-class PathManager:
-    
-    def __init__(self):
-        self.project_root = self._get_project_root()
-        self.artifacts_dir = os.path.join(self.project_root, 'artifacts')
-        self.data_raw_dir = os.path.join(self.artifacts_dir, 'data', 'raw')
-        
-        os.makedirs(self.data_raw_dir, exist_ok=True)
-    
-    def _get_project_root(self) -> str:
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        return os.path.abspath(os.path.join(current_dir, '..', '..'))
-    
-    def get_raw_data_path(self) -> str:
-        return os.path.join(self.data_raw_dir, "raw_data.csv")
+from src.utils.pathmanager import PathManager
 
 def ingest_data():
     try:

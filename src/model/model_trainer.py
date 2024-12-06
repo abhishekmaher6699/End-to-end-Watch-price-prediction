@@ -21,35 +21,9 @@ from catboost import CatBoostRegressor
 
 from src.utils.exception import CustomException
 from src.utils.logger import logging
+from src.utils.pathmanager import PathManager
 
 from tqdm.auto import tqdm
-
-class PathManager:
-    
-    def __init__(self):
-        self.project_root = self._get_project_root()
-        self.artifacts_dir = os.path.join(self.project_root, 'artifacts')
-        self.data_processed_dir = os.path.join(self.artifacts_dir, 'data', 'processed')
-        self.models_dir = os.path.join(self.artifacts_dir, 'models')
-        
-        os.makedirs(self.data_processed_dir, exist_ok=True)
-        os.makedirs(self.models_dir, exist_ok=True)
-    
-    def _get_project_root(self) -> str:
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        return os.path.abspath(os.path.join(current_dir, '..', '..'))
-    
-    def get_params_path(self) -> str:
-        return os.path.join(self.project_root, 'params.yaml')
-    
-    def get_train_data_path(self) -> str:
-        return os.path.join(self.data_processed_dir, 'train.csv')
-
-    def get_model_path(self) -> str:
-        return os.path.join(self.models_dir, 'pipeline.pkl')
-    
-    def get_columns_path(self) -> str:
-        return os.path.join(self.models_dir, 'columns.pkl')
 
 def load_params(params_path: str) -> dict:
     try:
@@ -122,7 +96,7 @@ def train_pipeline(pipeline, X_train, y_train):
 def save_model(pipeline, columns, path_manager):
     try:
         
-        with open(path_manager.get_model_path(), 'wb') as f:
+        with open(path_manager.get_pipeline_path(), 'wb') as f:
             pickle.dump(pipeline, f)
         logging.info("Pipeline saved!")
 
