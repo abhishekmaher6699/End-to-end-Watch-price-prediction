@@ -19,3 +19,7 @@ logs
 catboost_info
 .pytest_cache
 /experiment_info.json
+
+artifacts
+
+reports

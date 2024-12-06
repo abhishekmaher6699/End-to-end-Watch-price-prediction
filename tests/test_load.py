@@ -7,6 +7,7 @@ mlflow.set_tracking_uri("http://127.0.0.1:5000")
 @pytest.mark.parametrize("model_name, deployment_status", [
     ("watch_price_predictor", "staging"),])
 def test_load_latest_staging_model(model_name, deployment_status):
+    
     client = MlflowClient()
     
     all_versions = client.search_model_versions(f"name='{model_name}'")

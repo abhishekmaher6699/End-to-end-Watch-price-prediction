@@ -29,7 +29,7 @@ def load_params(params_path: str) -> dict:
     try:
         with open(params_path, 'r') as file:
             params = yaml.safe_load(file)
-        logging.info("Params loaded successfully")
+        logging.info("Params loaded successfully!")
         return params
     except Exception as e:
         raise CustomException(e, sys)

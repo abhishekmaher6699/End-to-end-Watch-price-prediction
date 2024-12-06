@@ -223,7 +223,7 @@ def impute_missing_vals(df):
 
 def split_data(df):
     try:
-        train_df, test_df = train_test_split(df, test_size=0.2, random_state=35)
+        train_df, test_df = train_test_split(df, test_size=0.2, random_state=32)
         logging.info("data split into traiin and test ")
         return train_df, test_df
     except Exception as e:
