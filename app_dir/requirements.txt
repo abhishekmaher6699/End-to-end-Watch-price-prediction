@@ -1,0 +1,7 @@
+catboost==1.2.7
+docker==7.1.0
+joblib==1.4.2
+numpy==1.26.4
+pandas==2.2.3
+scikit-learn==1.5.2
+streamlit==1.40.2

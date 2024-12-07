@@ -16,9 +16,10 @@ def add_sidebar():
 
             
         st.markdown("## 🕰️ Luxury Watch Price Predictor")
-
-        st.image("app/static/watch.jpg", width=350)
-        
+        try:
+            st.image("/app/app_dir/static/watch.jpg", width=350)
+        except:
+            pass
         st.markdown("### 📊 Project Overview")
         st.markdown("""
         
@@ -70,9 +71,9 @@ add_sidebar()
 
 @st.cache_resource
 def load_resources():
-    pipeline = joblib.load("artifacts/models/pipeline.pkl")
-    columns = joblib.load("artifacts/models/columns.pkl")
-    df = pd.read_csv("artifacts/data/processed/processed_data.csv")
+    pipeline = joblib.load("pipeline.pkl")
+    columns = joblib.load("columns.pkl")
+    df = pd.read_csv("processed_data.csv")
     return pipeline, columns, df
 
 def prepare_categorical_lists(columns):
