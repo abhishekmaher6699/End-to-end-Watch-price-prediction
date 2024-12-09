@@ -161,8 +161,8 @@ jobs:
           docker pull 529088280615.dkr.ecr.us-east-1.amazonaws.com/watch-price-predictor:latest
 
           # Stop and remove any running container
-          docker stop watch-price-predictor || true
-          docker rm watch-price-predictor || true
+          docker stop 529088280615.dkr.ecr.us-east-1.amazonaws.com/watch-price-predictor:latest || true
+          docker rm 529088280615.dkr.ecr.us-east-1.amazonaws.com/watch-price-predictor:latest || true
 
           # Run the Docker container
           docker run -d --name watch-price-predictor -p 8501:8501 529088280615.dkr.ecr.us-east-1.amazonaws.com/watch-price-predictor:latest
