@@ -130,20 +130,24 @@ jobs:
     - name: Deploy Docker image to EC2
       if: success()
       run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          # Update system and install Docker
+          sudo apt-get update -y
+          sudo apt-get install -y docker.io
+          sudo systemctl start docker
+          sudo systemctl enable docker
+          sudo usermod -aG docker ubuntu
 
-            sudo apt-get update -y
-            sudo apt-get install -y docker.io
-            sudo systemctl start docker
-            sudo systemctl enable docker
-            sudo usermod -aG docker ubuntu
-
+          # Authenticate Docker to AWS ECR
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 529088280615.dkr.ecr.us-east-1.amazonaws.com
 
+          # Pull the Docker image
           docker pull 529088280615.dkr.ecr.us-east-1.amazonaws.com/watch-price-predictor:latest
 
+          # Stop and remove any running container
           docker stop watch-price-predictor || true
           docker rm watch-price-predictor || true
 
+          # Run the Docker container
           docker run -d --name watch-price-predictor -p 8501:8501 529088280615.dkr.ecr.us-east-1.amazonaws.com/watch-price-predictor:latest
         EOF
