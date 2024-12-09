@@ -88,7 +88,7 @@ def create_pipeline(X_train, params):
 def train_pipeline(pipeline, X_train, y_train):
     try:
         pipeline.fit(X_train, y_train)
-        logging.info("Pipeline trained succesfully!")
+        logging.info("Pipeline trained succesfully")
         return pipeline
     except Exception as e:
         raise CustomException(e, sys)
