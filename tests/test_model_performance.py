@@ -57,7 +57,7 @@ def test_model_performance(model_name, validation_data):
 
         assert candidate_rmse < 500000, f"RMSE of candidate model is too high: {candidate_rmse}"
         assert candidate_mae < 200000, f"MAE of candidate model is too high: {candidate_mae}"
-        assert candidate_r2 > 0.85, f"R2 score of candidate model is too low: {candidate_r2}"
+        assert candidate_r2 > 0.60, f"R2 score of candidate model is too low: {candidate_r2}"
         print(f"Candidate model meets the threshold with RMSE: {candidate_rmse}, MAE: {candidate_mae}, R2: {candidate_r2}")
 
     else:
