@@ -1,4 +1,5 @@
 /watchenv
+/venv
 .env
 
 /notebooks/.ipynb_checkpoints
