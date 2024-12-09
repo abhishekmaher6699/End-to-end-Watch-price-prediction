@@ -5,11 +5,16 @@ import os
 
 from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
-import dagshub
-dagshub.init(repo_owner='abhishekmaher6699', repo_name='End-to-end-Watch-price-prediction', mlflow=True)
+# import dagshub
+# dagshub.init(repo_owner='abhishekmaher6699', repo_name='End-to-end-Watch-price-prediction', mlflow=True)
 
+
+mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
+
+os.environ["MLFLOW_TRACKING_USERNAME"] = os.getenv("MLFLOW_TRACKING_USERNAME")
+os.environ["MLFLOW_TRACKING_PASSWORD"] = os.getenv("MLFLOW_TRACKING_PASSWORD")
 
 @pytest.mark.parametrize("model_name, deployment_status", [
     ("watch_price_predictor", "staging"),])
