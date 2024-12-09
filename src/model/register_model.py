@@ -9,9 +9,10 @@ from src.utils.logger import logging
 from src.utils.exception import CustomException
 from dotenv import load_dotenv
 
-load_dotenv()
+import dagshub
+dagshub.init(repo_owner='abhishekmaher6699', repo_name='End-to-end-Watch-price-prediction', mlflow=True)
 
-mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
+load_dotenv()
 
 
 def load_model_info(file_path):

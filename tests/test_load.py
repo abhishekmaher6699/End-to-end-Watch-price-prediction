@@ -7,7 +7,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
+import dagshub
+dagshub.init(repo_owner='abhishekmaher6699', repo_name='End-to-end-Watch-price-prediction', mlflow=True)
+
 
 @pytest.mark.parametrize("model_name, deployment_status", [
     ("watch_price_predictor", "staging"),])

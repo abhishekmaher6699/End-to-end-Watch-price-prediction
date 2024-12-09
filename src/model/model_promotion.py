@@ -7,10 +7,10 @@ import os
 from src.utils.exception import CustomException
 from src.utils.logger import logging
 from dotenv import load_dotenv
+import dagshub
+dagshub.init(repo_owner='abhishekmaher6699', repo_name='End-to-end-Watch-price-prediction', mlflow=True)
 
 load_dotenv()
-
-mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
 
 def become_the_first_champion(client, model_name, candidate):
     try:
