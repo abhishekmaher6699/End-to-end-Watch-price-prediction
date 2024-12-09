@@ -32,6 +32,9 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-east-1  
+        BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+        FILE_KEY: ${{ secrets.FILE_KEY }}
+        MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_URI }}
       run: |
         dvc repro
 
@@ -73,6 +76,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-east-1
+        MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_URI }}
       run: |
         pytest tests/test_load.py
 
@@ -81,6 +85,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-east-1
+        MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_URI }}
       run: |
         pytest tests/test_model_signature.py
 
@@ -89,6 +94,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-east-1
+        MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_URI }}
       run: |
         pytest tests/test_model_performance.py
 
@@ -98,6 +104,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-east-1
+        MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_URI }}
       run: python -m src.model.model_promotion
 
     - name: Login to AWS ECR
