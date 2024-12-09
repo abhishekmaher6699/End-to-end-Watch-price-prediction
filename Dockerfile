@@ -16,4 +16,3 @@ EXPOSE 8501
 
 RUN ls -l /app
 CMD ["streamlit", "run", "/app/app_dir/streamlit_app.py"]
-

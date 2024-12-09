@@ -1,0 +1,149 @@
+name: Watch-Price-Predictor CICD Pipeline
+
+on: push
+
+jobs:
+  model-deployment:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run pipeline
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1  
+      run: |
+        dvc repro
+
+    - name: Push DVC-tracked data to remote
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1 
+      run: |
+        dvc push
+
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Add changes to Git
+      run: |
+        git add .
+
+    - name: Commit changes
+      if: ${{ github.actor != 'github-actions[bot]' }}
+      run: |
+        git commit -m "Automated commit of DVC outputs and updated code" || echo "No changes to commit"
+
+    - name: Push changes
+      if: ${{ github.actor != 'github-actions[bot]' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git push origin ${{ github.ref_name }}
+
+    - name: Install test dependencies
+      run: |
+          pip install pytest
+
+    - name: Run model loading test
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1
+      run: |
+        pytest tests/test_load.py
+
+    - name: Run model signature test
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1
+      run: |
+        pytest tests/test_model_signature.py
+
+    - name: Run model performance test
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1
+      run: |
+        pytest tests/test_model_performance.py
+
+    - name: Promote model to production
+      if: success()
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1
+      run: python -m src.model.model_promotion
+
+    - name: Login to AWS ECR
+      if: success()
+      run: |
+        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 529088280615.dkr.ecr.us-east-1.amazonaws.com
+
+    - name: Build Docker image
+      if: success()
+      run: |
+        docker build -t watch-price-predictor .
+
+    - name: Tag Docker image
+      if: success()
+      run: |
+        docker tag watch-price-predictor:latest 529088280615.dkr.ecr.us-east-1.amazonaws.com/watch-price-predictor:latest
+
+    - name: Push Docker image to AWS ECR
+      if: success()
+      run: |
+        docker push 529088280615.dkr.ecr.us-east-1.amazonaws.com/watch-price-predictor:latest
+
+    - name: Set up SSH agent
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+
+    - name: Deploy Docker image to EC2
+        if: success()
+        run: |
+            ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+
+              sudo apt-get update -y
+              sudo apt-get install -y docker.io
+              sudo systemctl start docker
+              sudo systemctl enable docker
+              sudo usermod -aG docker ubuntu
+
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 529088280615.dkr.ecr.us-east-1.amazonaws.com
+
+            docker pull 529088280615.dkr.ecr.us-east-1.amazonaws.com/watch-price-predictor:latest
+
+            docker stop watch-price-predictor || true
+            docker rm watch-price-predictor || true
+
+            docker run -d --name watch-price-predictor -p 8501:8501 529088280615.dkr.ecr.us-east-1.amazonaws.com/watch-price-predictor:latest
+          EOF

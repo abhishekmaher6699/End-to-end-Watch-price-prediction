@@ -63,12 +63,12 @@ def test_valid_categorical_values(load_processed_data):
     for material in df['Glass Material'].unique():
         assert material in valid_glass_materials, f"Invalid glass material value: {material}"
     
-    valid_case_materials = ['Steel', 'G-S Hybrid', 'Gold', 'Ceramic', 'Carbon-based', 'Titanium', 'Bronze', 'Others', 'Aluminium', 'Platinum']
+    valid_case_materials = ['Steel', 'gold-steel hybrid', 'Gold', 'Ceramic', 'Carbon-based', 'Titanium', 'Bronze', 'Others', 'Aluminium', 'Platinum']
     assert df['Case Material'].nunique() == len(valid_case_materials), "Case material unique values don't match"
     for material in df['Case Material'].unique():
         assert material in valid_case_materials, f"Invalid case material value: {material}"
 
-    valid_strap_materials = ['Steel', 'G-S Hybrid', 'Leather', 'Ceramic', 'Rubber', 'Others', 'Nylon', 'Titanium', 'Gold', 'Satin', 'Silicone', 'Bronze']
+    valid_strap_materials = ['Steel', 'gold-steel hybrid', 'Leather', 'Ceramic', 'Rubber', 'Others', 'Nylon', 'Titanium', 'Gold', 'Satin', 'Silicone', 'Bronze']
     assert df['Strap Material'].nunique() == len(valid_strap_materials), "Strap material unique values don't match"
     for material in df['Strap Material'].unique():
         assert material in valid_strap_materials, f"Invalid strap material value: {material}"

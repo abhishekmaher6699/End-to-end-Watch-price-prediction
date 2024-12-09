@@ -1,8 +1,13 @@
 import mlflow.pyfunc
 import pytest
 from mlflow.tracking import MlflowClient
+import os
 
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
+from dotenv import load_dotenv
+
+load_dotenv()
+
+mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
 
 @pytest.mark.parametrize("model_name, deployment_status", [
     ("watch_price_predictor", "staging"),])

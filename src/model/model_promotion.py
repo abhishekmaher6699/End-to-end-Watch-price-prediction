@@ -2,11 +2,15 @@ import mlflow
 import mlflow.pyfunc
 from mlflow.tracking import MlflowClient
 import sys
+import os
 
 from src.utils.exception import CustomException
 from src.utils.logger import logging
+from dotenv import load_dotenv
 
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
+load_dotenv()
+
+mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
 
 def become_the_first_champion(client, model_name, candidate):
     try:

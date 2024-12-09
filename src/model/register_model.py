@@ -7,9 +7,12 @@ import mlflow.client
 
 from src.utils.logger import logging
 from src.utils.exception import CustomException
+from dotenv import load_dotenv
 
+load_dotenv()
 
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
+mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
+
 
 def load_model_info(file_path):
     try:

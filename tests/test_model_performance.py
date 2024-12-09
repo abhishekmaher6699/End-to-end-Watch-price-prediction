@@ -4,9 +4,13 @@ from mlflow.tracking import MlflowClient
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+import os
 
+from dotenv import load_dotenv
 
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
+load_dotenv()
+
+mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
 
 @pytest.fixture
 def validation_data():

@@ -33,9 +33,9 @@ def process_case_material(df):
             if base in material:
                 return base
         return None
-    to_keep = ['Aluminium', 'Gold', 'Steel', 'Platinum', 'Titanium', 'Bronze', 'Gold-enhanced steel', 'Ceramic', 'Carbon-based']
+    to_keep = ['Aluminium', 'Gold', 'Steel', 'Platinum', 'Titanium', 'Bronze', 'gold-steel hybrid', 'Ceramic', 'Carbon-based']
 
-    df['Case Material'] = df['Case Material'].fillna('').apply(lambda x: 'Gold-enhanced steel' if 'Gold' in x and 'Steel' in x else x)
+    df['Case Material'] = df['Case Material'].fillna('').apply(lambda x: 'gold-steel hybrid' if 'Gold' in x and 'Steel' in x else x)
     df['Case Material'] = df['Case Material'].apply(extract_base).fillna(df['Case Material'])
     df['Case Material'] = df['Case Material'].apply(lambda x: 'Carbon-based' if 'Carbo' in x or 'NORTEQ®' in x else None).fillna(df['Case Material'])
     df['Case Material'] = df['Case Material'].apply(lambda x: x if x in to_keep else "Others") 
@@ -64,8 +64,8 @@ def process_strap_material(df):
             'Alcantara' : 'Fabric',
         }
 
-    to_keep = ['Satin', 'Gold', 'Steel', 'Farbic', 'Leather', 'Rubber', 'Titanium', 'Nylon', 'Bronze', 'Gold-enhanced steel', 'Silicone', 'Ceramic']
-    df['Strap Material'] = df['Strap Material'].apply(lambda x: 'Gold-enhanced steel' if 'Gold' in x and 'Steel' in x else x)
+    to_keep = ['Satin', 'Gold', 'Steel', 'Farbic', 'Leather', 'Rubber', 'Titanium', 'Nylon', 'Bronze', 'gold-steel hybrid', 'Silicone', 'Ceramic']
+    df['Strap Material'] = df['Strap Material'].apply(lambda x: 'gold-steel hybrid' if 'Gold' in x and 'Steel' in x else x)
     df['Strap Material'] = df['Strap Material'].apply(impute_).fillna(df['Strap Material'])
     df['Strap Material'] = df['Strap Material'].map(strap_mapping).fillna(df['Strap Material'])
     df['Strap Material'] = df['Strap Material'].apply(lambda x: x if x in to_keep else "Others") 

@@ -5,7 +5,12 @@ import pickle
 import pandas as pd
 import os
 
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
+from dotenv import load_dotenv
+
+load_dotenv()
+
+mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
+
 @pytest.fixture
 def columns():
     column_file_path = os.path.abspath("artifacts/models/columns.pkl")

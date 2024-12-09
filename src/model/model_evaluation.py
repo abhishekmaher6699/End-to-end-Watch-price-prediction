@@ -5,6 +5,7 @@ import sys
 import os
 import yaml
 import pickle
+from dotenv import load_dotenv
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
@@ -17,6 +18,8 @@ from mlflow.models import infer_signature
 from src.utils.exception import CustomException
 from src.utils.logger import logging
 from src.utils.pathmanager import PathManager
+
+load_dotenv()
 
 def load_data(file_path):
     try:
@@ -119,7 +122,7 @@ def main():
     try:
         path_manager = PathManager()
 
-        mlflow.set_tracking_uri("http://127.0.0.1:5000")
+        mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
         mlflow.set_experiment("pipeline-runs")
 
         with mlflow.start_run() as run:
