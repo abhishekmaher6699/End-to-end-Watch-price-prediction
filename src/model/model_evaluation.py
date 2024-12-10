@@ -18,10 +18,7 @@ from mlflow.models import infer_signature
 from src.utils.exception import CustomException
 from src.utils.logger import logging
 from src.utils.pathmanager import PathManager
-# import dagshub
-# dagshub.init(repo_owner='abhishekmaher6699', repo_name='End-to-end-Watch-price-prediction', mlflow=True)
-
-# load_dotenv()
+load_dotenv()
 
 mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
 

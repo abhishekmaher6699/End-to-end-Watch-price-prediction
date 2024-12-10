@@ -6,11 +6,7 @@ import pandas as pd
 import os
 
 from dotenv import load_dotenv
-
-# load_dotenv()
-
-# import dagshub
-# dagshub.init(repo_owner='abhishekmaher6699', repo_name='End-to-end-Watch-price-prediction', mlflow=True)
+load_dotenv()
 
 
 mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
