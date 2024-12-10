@@ -66,7 +66,6 @@ def add_sidebar():
             """)
 
 
-# Rest of your existing code remains the same, just add this function call before main()
 add_sidebar()
 
 @st.cache_resource
