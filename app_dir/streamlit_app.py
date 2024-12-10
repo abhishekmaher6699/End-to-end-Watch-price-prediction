@@ -12,8 +12,6 @@ st.set_page_config(
 
 def add_sidebar():
     with st.sidebar:
-
-
             
         st.markdown("## 🕰️ Luxury Watch Price Predictor")
         try:
