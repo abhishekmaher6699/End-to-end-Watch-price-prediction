@@ -295,6 +295,9 @@ aws configure
 - **S3**: Data storage(one for raw data storage and second for dvc remote storage)
   ![image](https://github.com/user-attachments/assets/1da2d02c-9a7b-4979-a464-d16c5a03c223)
 
+   <!-- Download the raw_data file from here and upload it on your s3 storage -->
+   <!-- https://github.com/abhishekmaher6699/resources/blob/main/watches_final.csv -->
+
 - **ECR**: Docker image repository
 - **EC2**: Application deployment
 - **IAM**: Access management
