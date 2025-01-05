@@ -22,9 +22,6 @@
 
 This machine learning project is a comprehensive end-to-end solution for predicting luxury watch prices using advanced data science and MLOps techniques. The application leverages cutting-edge machine learning models, robust data pipelines, and modern cloud infrastructure to provide accurate watch price predictions.
 
-Check it out on:
-http://18.212.223.248:8501/
-
 ![image](https://github.com/user-attachments/assets/dd9952c2-226f-4024-892e-6baf77f7a51e)
 ![image](https://github.com/user-attachments/assets/b40e2a09-1d4d-43f5-b3b9-697c9c0e2416)
 
